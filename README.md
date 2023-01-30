@@ -41,3 +41,11 @@ interest as it is a way to make something that people can enjoy and find useful 
 being a fun personal project that is designed in a way that allows me to add features and
 more functions later. The goal is ultimately to help others stay focused while working on 
 their computers.
+
+## User Stories
+
+- As a user I want to be able to create and name a new pet
+- As a user I want my pet to be stored in an arbitrarily long list of all my previous pets
+- As a user I want to be able to access my list of previous pets and see how long I kept each one alive
+- As a user I want to be able to feed my study buddy/pet
+- As a user I want to close the program and have my current pet remain unchanged
