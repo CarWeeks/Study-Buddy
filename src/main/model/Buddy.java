@@ -4,12 +4,14 @@ import model.Exceptions.EmptyNameException;
 
 // represents a single Buddy object
 public class Buddy {
+    public static final int TICKS_PER_SECOND = 10;
+    public static final int MAX_BAR = 10000;
     private String name;    // represents a Buddy's name
     private boolean living; // represents whether a buddy is alive or not
-    private int health;     // represents a Buddy's health [0, 10]
-    private int food;       // represents a Buddy's food [0, 10]
-    private int energy;     // represents a Buddy's energy [0, 10]
-    private int happiness;  // represents a Buddy's happiness [0, 10]
+    private int health;     // represents a Buddy's health [0, MAX_BAR]
+    private int food;       // represents a Buddy's food [0, MAX_BAR]
+    private int energy;     // represents a Buddy's energy [0, MAX_BAR]
+    private int happiness;  // represents a Buddy's happiness [0, MAX_BAR]
 
     // EFFECTS: instantiates a living buddy with a name and full stats
     public Buddy(String newName) throws EmptyNameException {
@@ -18,10 +20,33 @@ public class Buddy {
         } else {
             this.name = newName;
             this.living = true;
-            this.health = 10;
-            this.food = 10;
-            this.energy = 10;
-            this.happiness = 10;
+            this.health = MAX_BAR;
+            this.food = MAX_BAR;
+            this.energy = MAX_BAR;
+            this.happiness = MAX_BAR;
+        }
+    }
+
+    public void updateStats() {
+        if (this.getFood() > 0) {
+            this.decreaseFood(1);
+            this.increaseHappiness(1);
+        }
+
+        if (this.getFood() < MAX_BAR / 2) {
+            this.decreaseEnergy(1);
+        }
+
+        if (this.getFood() == 0) {
+            this.decreaseHealth(1);
+        }
+
+        if (this.getHealth() < MAX_BAR) {
+            this.decreaseHappiness(1);
+        }
+
+        if (this.getHealth() == 0) {
+            this.living = false;
         }
     }
 
@@ -64,75 +89,87 @@ public class Buddy {
     }
 
     /*
-     * REQUIRES: health + amount <= 10
      * MODIFIES: this
      * EFFECTS: increases health by given amount
      */
     public void increaseHealth(int amount) {
-        this.health += amount;
+        if (this.health + amount <= MAX_BAR) {
+            this.health += amount;
+        }
     }
 
     /*
-     * REQUIRES: health - amount >= 0
      * MODIFIES: this
      * EFFECTS: decreases health by given amount
      */
-    public void decreasesHealth(int amount) {
-        this.health -= amount;
+    public void decreaseHealth(int amount) {
+        if (this.health - amount >= 0) {
+            this.health -= amount;
+        }
     }
 
     /*
-     * REQUIRES: food + amount <= 10
      * MODIFIES: this
      * EFFECTS: increases food by given amount
      */
     public void increaseFood(int amount) {
-        this.food += amount;
+        if (this.food + amount <= MAX_BAR) {
+            this.food += amount;
+        }
     }
 
     /*
-     * REQUIRES: food - amount >= 0
      * MODIFIES: this
      * EFFECTS: decreases food by given amount
      */
     public void decreaseFood(int amount) {
-        this.food -= amount;
+        if (this.food - amount >= 0) {
+            this.food -= amount;
+        }
     }
 
     /*
-     * REQUIRES: energy + amount <= 10
      * MODIFIES: this
      * EFFECTS: increases energy by given amount
      */
     public void increaseEnergy(int amount) {
-        this.energy += amount;
+        if (this.energy + amount <= MAX_BAR) {
+            this.energy += amount;
+        }
     }
 
     /*
-     * REQUIRES: energy - amount >= 0
      * MODIFIES: this
      * EFFECTS: decreases energy by given amount
      */
     public void decreaseEnergy(int amount) {
-        this.energy -= amount;
+        if (this.energy - amount >= 0) {
+            this.energy -= amount;
+        }
     }
 
     /*
-     * REQUIRES: happiness + amount <= 10
      * MODIFIES: this
      * EFFECTS: increases happiness by given amount
      */
     public void increaseHappiness(int amount) {
-        this.happiness += amount;
+        if (this.happiness + amount <= MAX_BAR) {
+            this.happiness += amount;
+        }
     }
 
     /*
-     * REQUIRES: happiness - amount >= 0
      * MODIFIES: this
      * EFFECTS: decreases happiness by given amount
      */
     public void decreaseHappiness(int amount) {
-        this.happiness -= amount;
+        if (this.happiness - amount >= 0) {
+            this.happiness -= amount;
+        }
+    }
+
+    public void kill() {
+        this.living = false;
     }
 }
 
