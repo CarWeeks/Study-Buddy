@@ -12,29 +12,46 @@ import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import model.Buddy;
-import model.Exceptions.EmptyNameException;
+import model.Graveyard;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-// Buddy application
+// Buddy application runs the current Buddy and Graveyard
 public class BuddyApp {
     private Buddy currBuddy;
+    private Graveyard graveyard;
     private Scanner input;
+    private Scanner answer;
     private Screen screen;
     private WindowBasedTextGUI endGui;
 
-    public BuddyApp() throws EmptyNameException, IOException, InterruptedException {
+    // EFFECTS: starts running the program
+    public BuddyApp() throws IOException, InterruptedException {
+        this.graveyard = new Graveyard();
+        printOpening();
         runBuddy();
     }
 
-    private void runBuddy() throws IOException, EmptyNameException, InterruptedException {
+    // EFFECTS: prints opening statement to users of the program
+    private void printOpening() {
+        System.out.println("Welcome to the Study Buddy Application!");
+        System.out.println("In this application you will be able to name your Buddy and help care for it.");
+        System.out.println("Your Buddy will get hungry fast, so be sure to feed it regularly!");
+        System.out.println("While your Buddy is alive you will be able to enter the following commands:");
+        System.out.println("f: to feed your Buddy\nk: to kill your Buddy\ng: to view your graveyard in the console");
+        System.out.println("Enjoy, and don't let your Buddy die!");
+    }
+
+    // EFFECTS: begins the program by starting the screen and begins ticking
+    private void runBuddy() throws IOException, InterruptedException {
         createCurrBuddy();
         screen = new DefaultTerminalFactory().createScreen();
         screen.startScreen();
         beginTicks();
     }
 
+    // ticks the Buddy until the window is inactive or the Buddy dies
     private void beginTicks() throws IOException, InterruptedException {
         while (currBuddy.isLiving() || endGui.getActiveWindow() != null) {
             tick();
@@ -44,19 +61,23 @@ public class BuddyApp {
         System.exit(0);
     }
 
-    private void tick() throws IOException {
+    // MODIFIES: this
+    // EFFECTS: updates the Buddy's statistics based on what they currently are and refreshes the output
+    private void tick() throws IOException, InterruptedException {
         handleUserInput();
 
-        currBuddy.updateStats();
+        this.currBuddy.updateStats();
 
-        screen.setCursorPosition(new TerminalPosition(0, 0));
-        screen.clear();
+        this.screen.setCursorPosition(new TerminalPosition(0, 0));
+        this.screen.clear();
         printScreen();
-        screen.refresh();
+        this.screen.refresh();
 
-        screen.setCursorPosition(new TerminalPosition(screen.getTerminalSize().getColumns() - 1, 0));
+        this.screen.setCursorPosition(new TerminalPosition(screen.getTerminalSize().getColumns() - 1, 0));
     }
 
+    // MODIFIES: this
+    // EFFECTS: changes the buddy or prints the graveyard according to the key pressed
     private void handleUserInput() throws IOException {
         KeyStroke stroke = screen.pollInput();
 
@@ -75,23 +96,63 @@ public class BuddyApp {
         if (stroke.getCharacter() == 'k') {
             currBuddy.kill();
         }
+
+        if (stroke.getCharacter() == 'g') {
+            printGraveyard();
+        }
     }
 
-    private void printScreen() {
+    // EFFECTS: prints each Buddy's name in the graveyard and how long they lived
+    private void printGraveyard() {
+        System.out.println("Buddy Graveyard:");
+        for (int i = 0; i < this.graveyard.getLength(); i++) {
+            Buddy b = this.graveyard.getBuddy(i);
+            System.out.println("Buddy: " + b.getName() + "\n\tTime alive: "
+                    + Integer.toString(b.getTimeAlive()) + " seconds");
+        }
+    }
+
+    // EFFECTS: prints the screen
+    private void printScreen() throws IOException, InterruptedException {
         if (!currBuddy.isLiving()) {
             if (endGui == null) {
                 drawEndScreen();
+                endGui = null;
+                buryBuddy();
+                runBuddy();
             }
 
             return;
         }
 
         drawStatus();
-        //drawBuddy();
+        drawBuddy();
     }
 
-    private void createCurrBuddy() throws EmptyNameException {
-        System.out.println("Let's make a new Buddy!");
+    // MODIFIES: this
+    // EFFECTS
+    private void buryBuddy() {
+        System.out.println("Would you like to bury your Buddy in the graveyard?");
+        String result = "";
+
+        while (!(result.equals("y") || result.equals("n"))) {
+            System.out.println("Enter one of the following to proceed");
+            System.out.println("y for yes");
+            System.out.println("n for no");
+            answer = new Scanner(System.in);
+            result = answer.next();
+            result = result.toLowerCase();
+        }
+
+        if (result.equals("y")) {
+            this.graveyard.addBuddy(currBuddy);
+        }
+    }
+
+
+
+    private void createCurrBuddy() {
+        System.out.println("Let's make a new Buddy!\nEnter your new Buddy's name:");
         input = new Scanner(System.in);
         String newName = input.next();
         currBuddy = new Buddy(newName);
@@ -102,7 +163,7 @@ public class BuddyApp {
 
         new MessageDialogBuilder()
                 .setTitle("Your Buddy died!")
-                .setText("You can view your buddy in the graveyard")
+                .setText("Go back to the console to decide to bury your Buddy in the graveyard.")
                 .addButton(MessageDialogButton.Close)
                 .build()
                 .showDialog(endGui);
@@ -143,42 +204,32 @@ public class BuddyApp {
         happinessText.putString(63, 22, happinessString);
     }
 
-    private void printHappyBuddy() {
-        System.out.println("    __________");
-        System.out.println("   / ^    ^   | ");
-        System.out.println("  /  0    0   | ");
-        System.out.println("  |     U     |");
-        System.out.println("  ------------");
-        System.out.println("  ||         ||");
-        System.out.println("  —           —");
-    }
-
-    private void printSadBuddy() {
-        System.out.println("    __________");
-        System.out.println("   / ,    ,   | ");
-        System.out.println("  /  0    0   | ");
-        System.out.println("  |     ^     |");
-        System.out.println("  ------------");
-        System.out.println("  ||         ||");
-        System.out.println("  —           —");
-    }
-
-    private void printNormBuddy() {
-        System.out.println("    __________");
-        System.out.println("   / —    —   | ");
-        System.out.println("  /  0    0   | ");
-        System.out.println("  |     -     |");
-        System.out.println("  ------------");
-        System.out.println("  ||         ||");
-        System.out.println("  —           —");
-    }
-
-    private void printCurrStats(Buddy b) {
-        System.out.println("Current statistics for " + b.getName());
-        System.out.println("Health: " + b.getHealth());
-        System.out.println("Food: " + b.getFood());
-        System.out.println("Energy: " + b.getEnergy());
-        System.out.println("Happiness: " + b.getHappiness());
+    private void drawBuddy() {
+        TextGraphics bodyText = screen.newTextGraphics();
+        bodyText.setForegroundColor(TextColor.ANSI.GREEN);
+        bodyText.putString(30, 7, "     _________");
+        bodyText.putString(30, 8, "    /         |");
+        if (currBuddy.getHappiness() > Buddy.MAX_BAR / 2) {
+            bodyText.putString(30, 9, "   / ^    ^   |");
+        } else {
+            bodyText.putString(30, 9, "   / '    '   |");
+        }
+        if (currBuddy.getFood() % 50 == 0) {
+            bodyText.putString(30, 10, "  /  -    -   |");
+        } else {
+            bodyText.putString(30, 10, "  /  0    0   |");
+        }
+        if (currBuddy.getHappiness() > Buddy.MAX_BAR / 2) {
+            bodyText.putString(30, 11, "  |     U     |");
+        } else {
+            bodyText.putString(30, 11, "  |     ^     |");
+        }
+        bodyText.putString(30, 12, "  ------------");
+        bodyText.putString(30, 13, "  ||         ||");
+        bodyText.putString(30, 14, "  —           —");
+        TextGraphics nameText = screen.newTextGraphics();
+        nameText.setForegroundColor(TextColor.ANSI.BLUE);
+        nameText.putString(36, 17, currBuddy.getName());
     }
 }
 

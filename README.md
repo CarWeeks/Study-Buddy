@@ -44,8 +44,9 @@ their computers.
 
 ## User Stories
 
-- As a user I want to be able to create and name a new pet
-- As a user I want my pet to be stored in an arbitrarily long list of all my previous pets
-- As a user I want to be able to access my list of previous pets and see how long I kept each one alive
-- As a user I want to be able to feed my study buddy/pet
-- As a user I want to close the program and have my current pet remain unchanged
+- As a user I want to be able to create and name a new Buddy
+- As a user I want to be able to store an arbitrarily long list of my past buddies
+- As a user I want to be able to access my list of previous Buddies and see how long I kept each one alive
+- As a user I want to be able to feed my study Buddy
+- As a user I want to be able to kill my current Buddy
+- As a user I want to decide whether my Buddy is stored in the graveyard when it dies
