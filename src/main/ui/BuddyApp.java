@@ -33,13 +33,14 @@ public class BuddyApp {
         runBuddy();
     }
 
-    // EFFECTS: prints opening statement to users of the program
     private void printOpening() {
-        System.out.println("Welcome to the Study Buddy Application!");
+        System.out.println("\u001B[35mWelcome to the Study Buddy Application!\u001B[0m");
         System.out.println("In this application you will be able to name your Buddy and help care for it.");
         System.out.println("Your Buddy will get hungry fast, so be sure to feed it regularly!");
         System.out.println("While your Buddy is alive you will be able to enter the following commands:");
-        System.out.println("f: to feed your Buddy\nk: to kill your Buddy\ng: to view your graveyard in the console");
+        System.out.println("\u001B[33m"
+                + "f: to feed your Buddy\nk: to kill your Buddy\ng: to view your graveyard in the console"
+                + "\u001B[0m");
         System.out.println("Enjoy, and don't let your Buddy die!");
     }
 
@@ -150,6 +151,7 @@ public class BuddyApp {
         }
     }
 
+    // REQUIRES: inputted name must not contain spaces
     // MODIFIES: this
     // EFFECTS: creates a new Buddy object based on user input
     private void createCurrBuddy() {

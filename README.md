@@ -1,6 +1,6 @@
 # Study Buddy
 
-## an interactive way to keep studying fun and productive
+## An interactive way to keep studying fun and productive
 
 This application is intended to provide a way for those who often work on computers 
 *(computer scientists, computer science students)* to stay productive. The study buddy

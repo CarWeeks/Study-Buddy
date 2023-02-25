@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 // represents a list of your past Buddies
 public class Graveyard {

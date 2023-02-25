@@ -1,16 +1,15 @@
 package model;
 
 import java.lang.System;
-import java.math.MathContext;
 
 // represents a Buddy with a name, birth time, death time and health, food, energy, and happiness bars
 public class Buddy {
     public static final int TICKS_PER_SECOND = 10;
     public static final int MAX_BAR = 10000;
-    private long creationTime;
+    private final long creationTime;
     private long deathTime;
     private int timeAlive;
-    private String name;    // represents a Buddy's name
+    private final String name;    // represents a Buddy's name
     private boolean living; // represents whether a buddy is alive or not
     private int health;     // represents a Buddy's health [0, MAX_BAR]
     private int food;       // represents a Buddy's food [0, MAX_BAR]
