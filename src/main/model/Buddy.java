@@ -5,7 +5,7 @@ import java.math.MathContext;
 
 // represents a Buddy with a name, birth time, death time and health, food, energy, and happiness bars
 public class Buddy {
-    public static final int TICKS_PER_SECOND = 1000;
+    public static final int TICKS_PER_SECOND = 10;
     public static final int MAX_BAR = 10000;
     private long creationTime;
     private long deathTime;
@@ -85,6 +85,7 @@ public class Buddy {
         return this.happiness;
     }
 
+    // REQUIRES: amount >= 0
     // MODIFIES: this
     // EFFECTS: increases health by given amount
     public void increaseHealth(int amount) {
@@ -93,6 +94,7 @@ public class Buddy {
         }
     }
 
+    // REQUIRES: amount >= 0
     // MODIFIES: this
     // EFFECTS: decreases health by given amount
     public void decreaseHealth(int amount) {
@@ -101,6 +103,7 @@ public class Buddy {
         }
     }
 
+    // REQUIRES: amount >= 0
     // MODIFIES: this
     // EFFECTS: increases food by given amount
     public void increaseFood(int amount) {
@@ -109,6 +112,7 @@ public class Buddy {
         }
     }
 
+    // REQUIRES: amount >= 0
     // MODIFIES: this
     // EFFECTS: decreases food by given amount
     public void decreaseFood(int amount) {
@@ -117,6 +121,7 @@ public class Buddy {
         }
     }
 
+    // REQUIRES: amount >= 0
     // MODIFIES: this
     // EFFECTS: increases energy by given amount
     public void increaseEnergy(int amount) {
@@ -125,6 +130,7 @@ public class Buddy {
         }
     }
 
+    // REQUIRES: amount >= 0
     // MODIFIES: this
     // EFFECTS: decreases energy by given amount
     public void decreaseEnergy(int amount) {
@@ -133,6 +139,7 @@ public class Buddy {
         }
     }
 
+    // REQUIRES: amount >= 0
     // MODIFIES: this
     // EFFECTS: increases happiness by given amount
     public void increaseHappiness(int amount) {
@@ -141,6 +148,7 @@ public class Buddy {
         }
     }
 
+    // REQUIRES: amount >= 0
     // MODIFIES: this
     // EFFECTS: decreases happiness by given amount
     public void decreaseHappiness(int amount) {

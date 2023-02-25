@@ -127,10 +127,11 @@ public class BuddyApp {
 
         drawStatus();
         drawBuddy();
+        drawBuddyName();
     }
 
     // MODIFIES: this
-    // EFFECTS
+    // EFFECTS: asks user if they want to add their Buddy to the graveyard, adds Buddy is yes
     private void buryBuddy() {
         System.out.println("Would you like to bury your Buddy in the graveyard?");
         String result = "";
@@ -149,17 +150,19 @@ public class BuddyApp {
         }
     }
 
-
-
+    // MODIFIES: this
+    // EFFECTS: creates a new Buddy object based on user input
     private void createCurrBuddy() {
         System.out.println("Let's make a new Buddy!\nEnter your new Buddy's name:");
-        input = new Scanner(System.in);
+        this.input = new Scanner(System.in);
         String newName = input.next();
-        currBuddy = new Buddy(newName);
+        this.currBuddy = new Buddy(newName);
     }
 
+    // MODIFIES: this
+    // EFFECTS: prints end screen once Buddy dies to tell user their Buddy died
     private void drawEndScreen() {
-        endGui = new MultiWindowTextGUI(screen);
+        this.endGui = new MultiWindowTextGUI(screen);
 
         new MessageDialogBuilder()
                 .setTitle("Your Buddy died!")
@@ -169,6 +172,7 @@ public class BuddyApp {
                 .showDialog(endGui);
     }
 
+    // EFFECTS: prints current Buddy and current stats
     private void drawStatus() {
         drawHealth();
         drawFood();
@@ -176,6 +180,7 @@ public class BuddyApp {
         drawHappiness();
     }
 
+    // EFFECTS: prints current Buddy's health in top left of screen
     private void drawHealth() {
         TextGraphics healthText = screen.newTextGraphics();
         String healthString = "Health: " + Integer.toString(currBuddy.getHealth());
@@ -183,6 +188,7 @@ public class BuddyApp {
         healthText.putString(1, 1, healthString);
     }
 
+    // EFFECTS: prints current Buddy's food in top right of screen
     private void drawFood() {
         TextGraphics foodText = screen.newTextGraphics();
         String foodString = "Food: " + Integer.toString(currBuddy.getFood());
@@ -190,6 +196,7 @@ public class BuddyApp {
         foodText.putString(68, 1, foodString);
     }
 
+    // EFFECTS: prints current Buddy's energy in bottom left of screen
     private void drawEnergy() {
         TextGraphics energyText = screen.newTextGraphics();
         String energyString = "Energy: " + Integer.toString(currBuddy.getEnergy());
@@ -197,6 +204,7 @@ public class BuddyApp {
         energyText.putString(1, 22, energyString);
     }
 
+    // EFFECTS: prints current Buddy's happiness in bottom right of screen
     private void drawHappiness() {
         TextGraphics happinessText = screen.newTextGraphics();
         String happinessString = "Happiness: " + Integer.toString(currBuddy.getHappiness());
@@ -204,22 +212,24 @@ public class BuddyApp {
         happinessText.putString(63, 22, happinessString);
     }
 
+    // MODIFIES: this
+    // EFFECTS: prints picture of your Buddy in the middle of the screen in green
     private void drawBuddy() {
-        TextGraphics bodyText = screen.newTextGraphics();
+        TextGraphics bodyText = this.screen.newTextGraphics();
         bodyText.setForegroundColor(TextColor.ANSI.GREEN);
         bodyText.putString(30, 7, "     _________");
         bodyText.putString(30, 8, "    /         |");
-        if (currBuddy.getHappiness() > Buddy.MAX_BAR / 2) {
+        if (this.currBuddy.getHappiness() > Buddy.MAX_BAR / 2) {
             bodyText.putString(30, 9, "   / ^    ^   |");
         } else {
             bodyText.putString(30, 9, "   / '    '   |");
         }
-        if (currBuddy.getFood() % 50 == 0) {
+        if (this.currBuddy.getFood() % 50 == 0) {
             bodyText.putString(30, 10, "  /  -    -   |");
         } else {
             bodyText.putString(30, 10, "  /  0    0   |");
         }
-        if (currBuddy.getHappiness() > Buddy.MAX_BAR / 2) {
+        if (this.currBuddy.getHappiness() > Buddy.MAX_BAR / 2) {
             bodyText.putString(30, 11, "  |     U     |");
         } else {
             bodyText.putString(30, 11, "  |     ^     |");
@@ -227,9 +237,13 @@ public class BuddyApp {
         bodyText.putString(30, 12, "  ------------");
         bodyText.putString(30, 13, "  ||         ||");
         bodyText.putString(30, 14, "  —           —");
-        TextGraphics nameText = screen.newTextGraphics();
+    }
+
+    // EFFECTS: draws Buddy's name below Buddy's picture on the screen in blue
+    private void drawBuddyName() {
+        TextGraphics nameText = this.screen.newTextGraphics();
         nameText.setForegroundColor(TextColor.ANSI.BLUE);
-        nameText.putString(36, 17, currBuddy.getName());
+        nameText.putString(36, 17, this.currBuddy.getName());
     }
 }
 
