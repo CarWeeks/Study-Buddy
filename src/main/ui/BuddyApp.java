@@ -105,7 +105,7 @@ public class BuddyApp {
 
     // EFFECTS: prints each Buddy's name in the graveyard and how long they lived
     private void printGraveyard() {
-        System.out.println("Buddy Graveyard:");
+        System.out.println("\u001B[31mBuddy Graveyard:\u001B[0m");
         for (int i = 0; i < this.graveyard.getLength(); i++) {
             Buddy b = this.graveyard.getBuddy(i);
             System.out.println("Buddy: " + b.getName() + "\n\tTime alive: "
@@ -139,8 +139,8 @@ public class BuddyApp {
 
         while (!(result.equals("y") || result.equals("n"))) {
             System.out.println("Enter one of the following to proceed");
-            System.out.println("y for yes");
-            System.out.println("n for no");
+            System.out.println("\u001B[33m" + "y for yes");
+            System.out.println("n for no" + "\u001B[0m");
             answer = new Scanner(System.in);
             result = answer.next();
             result = result.toLowerCase();
