@@ -170,6 +170,14 @@ class BuddyTest {
         assertEquals(Buddy.MAX_BAR, testBuddy1.getEnergy());
         assertEquals(Buddy.MAX_BAR, testBuddy1.getHappiness());
         assertTrue(testBuddy1.isLiving());
+
+        testBuddy1.decreaseFood(Buddy.MAX_BAR / 2);
+        testBuddy1.updateStats();
+        assertEquals(Buddy.MAX_BAR / 2 - 2, testBuddy1.getFood());
+        assertEquals(Buddy.MAX_BAR, testBuddy1.getHealth());
+        assertEquals(Buddy.MAX_BAR - 1, testBuddy1.getEnergy());
+        assertEquals(Buddy.MAX_BAR, testBuddy1.getHappiness());
+        assertTrue(testBuddy1.isLiving());
     }
 
     @Test
@@ -212,5 +220,17 @@ class BuddyTest {
         assertEquals(0, testBuddy1.getHealth());
         assertEquals(0, testBuddy1.getFood());
         assertFalse(testBuddy1.isLiving());
+    }
+
+    @Test
+    public void testUpdateStatsLessHealth() {
+        testBuddy1.decreaseHealth(1);
+        testBuddy1.decreaseHappiness(1);
+        testBuddy1.updateStats();
+        assertEquals(Buddy.MAX_BAR - 1, testBuddy1.getFood());
+        assertEquals(Buddy.MAX_BAR - 1, testBuddy1.getHealth());
+        assertEquals(Buddy.MAX_BAR, testBuddy1.getEnergy());
+        assertEquals(Buddy.MAX_BAR, testBuddy1.getHappiness());
+        assertTrue(testBuddy1.isLiving());
     }
 }
