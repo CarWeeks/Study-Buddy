@@ -42,6 +42,13 @@ class BuddyTest {
     }
 
     @Test
+    public void testGetDeathTime() {
+        testBuddy1.kill();
+        long timeOfDeath = System.currentTimeMillis();
+        assertEquals(timeOfDeath, testBuddy1.getDeathTime());
+    }
+
+    @Test
     public void testConstructor() {
         assertEquals("testName1", testBuddy1.getName());
         assertEquals(Buddy.MAX_BAR, testBuddy1.getHealth());
@@ -64,6 +71,11 @@ class BuddyTest {
         assertEquals(0, testBuddy2.getHealth());
         testBuddy2.increaseHealth(5);
         assertEquals(5, testBuddy2.getHealth());
+
+        testBuddy2.decreaseHealth(5);
+        assertEquals(0, testBuddy2.getHealth());
+        testBuddy2.decreaseHealth(1);
+        assertEquals(0, testBuddy2.getHealth());
     }
 
     @Test
@@ -79,6 +91,11 @@ class BuddyTest {
         assertEquals(0, testBuddy2.getFood());
         testBuddy2.increaseFood(5);
         assertEquals(5, testBuddy2.getFood());
+
+        testBuddy2.decreaseFood(5);
+        assertEquals(0, testBuddy2.getFood());
+        testBuddy2.decreaseFood(1);
+        assertEquals(0, testBuddy2.getFood());
     }
 
     @Test
@@ -94,6 +111,11 @@ class BuddyTest {
         assertEquals(0, testBuddy2.getEnergy());
         testBuddy2.increaseEnergy(5);
         assertEquals(5, testBuddy2.getEnergy());
+
+        testBuddy2.decreaseEnergy(5);
+        assertEquals(0, testBuddy2.getEnergy());
+        testBuddy2.decreaseEnergy(1);
+        assertEquals(0, testBuddy2.getEnergy());
     }
 
     @Test
@@ -109,6 +131,11 @@ class BuddyTest {
         assertEquals(0, testBuddy2.getHappiness());
         testBuddy2.increaseHappiness(5);
         assertEquals(5, testBuddy2.getHappiness());
+
+        testBuddy2.decreaseHappiness(5);
+        assertEquals(0, testBuddy2.getHappiness());
+        testBuddy2.decreaseHappiness(1);
+        assertEquals(0, testBuddy2.getHappiness());
     }
 
     @Test
@@ -157,6 +184,15 @@ class BuddyTest {
         assertEquals(Buddy.MAX_BAR - 1, testBuddy1.getHealth());
         assertEquals(Buddy.MAX_BAR - 1, testBuddy1.getEnergy());
         assertEquals(Buddy.MAX_BAR - 1, testBuddy1.getHappiness());
+        assertTrue(testBuddy1.isLiving());
+
+        testBuddy1.increaseHealth(1);
+        testBuddy1.increaseFood(Buddy.MAX_BAR / 2);
+        testBuddy1.updateStats();
+        assertEquals(Buddy.MAX_BAR - 3, testBuddy1.getFood());
+        assertEquals(Buddy.MAX_BAR, testBuddy1.getHealth());
+        assertEquals(Buddy.MAX_BAR, testBuddy1.getEnergy());
+        assertEquals(Buddy.MAX_BAR, testBuddy1.getHappiness());
         assertTrue(testBuddy1.isLiving());
     }
 
