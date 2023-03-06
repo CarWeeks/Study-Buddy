@@ -50,3 +50,5 @@ their computers.
 - As a user I want to be able to feed my study Buddy
 - As a user I want to be able to kill my current Buddy
 - As a user I want to decide whether my Buddy is stored in the graveyard when it dies
+- As a user I want to be able to save my current Buddy and the graveyard if I choose to do so
+- As a user I want to be able to reload my saved data and resume where I left off from the save if I choose to do so
