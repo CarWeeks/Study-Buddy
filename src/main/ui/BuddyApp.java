@@ -13,22 +13,31 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import model.Buddy;
 import model.Graveyard;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
 // Buddy application runs the current Buddy and Graveyard
 public class BuddyApp {
+    private static final String JSON_STORE = "./data/currentState.json";
     private Buddy currBuddy;
     private Graveyard graveyard;
     private Scanner input;
     private Scanner answer;
     private Screen screen;
     private WindowBasedTextGUI endGui;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     // EFFECTS: starts running the program
     public BuddyApp() throws IOException, InterruptedException {
         this.graveyard = new Graveyard();
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
+        checkLoad();
         printOpening();
         runBuddy();
     }
@@ -39,7 +48,8 @@ public class BuddyApp {
         System.out.println("Your Buddy will get hungry fast, so be sure to feed it regularly!");
         System.out.println("While your Buddy is alive you will be able to enter the following commands:");
         System.out.println("\u001B[33m"
-                + "f: to feed your Buddy\nk: to kill your Buddy\ng: to view your graveyard in the console"
+                + "f: to feed your Buddy\nk: to kill your Buddy\ng: to view your graveyard in the console\ns: to save"
+                + "your current Buddy and graveyard"
                 + "\u001B[0m");
         System.out.println("Enjoy, and don't let your Buddy die!");
     }
@@ -101,6 +111,10 @@ public class BuddyApp {
         if (stroke.getCharacter() == 'g') {
             printGraveyard();
         }
+
+        if (stroke.getCharacter() == 's') {
+            saveBuddyAndGraveyard();
+        }
     }
 
     // EFFECTS: prints each Buddy's name in the graveyard and how long they lived
@@ -109,7 +123,7 @@ public class BuddyApp {
         for (int i = 0; i < this.graveyard.getLength(); i++) {
             Buddy b = this.graveyard.getBuddy(i);
             System.out.println("Buddy: " + b.getName() + "\n\tTime alive: "
-                    + Integer.toString(b.getTimeAlive()) + " seconds");
+                    + Long.toString(b.getTimeAlive()) + " seconds");
         }
     }
 
@@ -159,6 +173,24 @@ public class BuddyApp {
         this.input = new Scanner(System.in);
         String newName = input.next();
         this.currBuddy = new Buddy(newName);
+    }
+
+    private void checkLoad() {
+        System.out.println("Would you like to load in your saved Buddy and graveyard?");
+        String result = "";
+
+        while (!(result.equals("y") || result.equals("n"))) {
+            System.out.println("Enter one of the following to proceed");
+            System.out.println("\u001B[33m" + "y for yes");
+            System.out.println("n for no" + "\u001B[0m");
+            answer = new Scanner(System.in);
+            result = answer.next();
+            result = result.toLowerCase();
+        }
+
+        if (result.equals("y")) {
+            loadBuddyAndGraveyard();
+        }
     }
 
     // MODIFIES: this
@@ -246,6 +278,30 @@ public class BuddyApp {
         TextGraphics nameText = this.screen.newTextGraphics();
         nameText.setForegroundColor(TextColor.ANSI.BLUE);
         nameText.putString(36, 17, this.currBuddy.getName());
+    }
+
+    // EFFECTS: saves the current Buddy and Graveyard to file
+    private void saveBuddyAndGraveyard() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(currBuddy, graveyard);
+            jsonWriter.close();
+            System.out.println("Saved " + currBuddy.getName() + " and your graveyard to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads workroom from file
+    private void loadBuddyAndGraveyard() {
+        try {
+            this.currBuddy = jsonReader.readBuddy();
+            this.graveyard = jsonReader.readGraveyard();
+            System.out.println("Loaded " + currBuddy.getName() + " and graveyard from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
     }
 }
 

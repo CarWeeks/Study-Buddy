@@ -1,5 +1,8 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 // represents a list of your past Buddies
@@ -27,5 +30,17 @@ public class Graveyard {
     // EFFECTS: returns Buddy at given index of graveyard list
     public Buddy getBuddy(int i) {
         return this.graveyard.get(i);
+    }
+
+    // EFFECTS: returns Buddies in this graveyard as a JSON array
+    public JSONArray allBuddiesToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Buddy b : graveyard) {
+            JSONObject buddy = b.buddyToJson();
+            jsonArray.put(buddy);
+        }
+
+        return jsonArray;
     }
 }

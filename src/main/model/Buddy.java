@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 import java.lang.System;
 
 // represents a Buddy with a name, birth time, death time and health, food, energy, and happiness bars
@@ -20,12 +22,27 @@ public class Buddy {
     // EFFECTS: instantiates a living buddy with a name and full stats
     public Buddy(String newName) {
         this.creationTime = System.currentTimeMillis();
+        this.deathTime = 0;
+        this.timeAlive = 0;
         this.living = true;
         this.health = MAX_BAR;
         this.food = MAX_BAR;
         this.energy = MAX_BAR;
         this.happiness = MAX_BAR;
         this.name = newName;
+    }
+
+    public Buddy(String name, Long creationTime, Long deathTime, int timeAlive, boolean living, int health, int food,
+                 int energy, int happiness) {
+        this.creationTime = creationTime;
+        this.deathTime = deathTime;
+        this.timeAlive = timeAlive;
+        this.living = living;
+        this.health = health;
+        this.food = food;
+        this.energy = energy;
+        this.happiness = happiness;
+        this.name = name;
     }
 
     // MODIFIES: this
@@ -181,5 +198,20 @@ public class Buddy {
     public int getTimeAlive() {
         return this.timeAlive;
     }
+
+    public JSONObject buddyToJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", this.name);
+        json.put("health", this.health);
+        json.put("food", this.food);
+        json.put("energy", this.energy);
+        json.put("happiness", this.happiness);
+        json.put("birth", this.creationTime);
+        json.put("death", this.deathTime);
+        json.put("timeAlive", this.timeAlive);
+        json.put("alive", this.living);
+        return json;
+    }
 }
+
 
