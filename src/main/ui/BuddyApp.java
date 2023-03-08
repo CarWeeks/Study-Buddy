@@ -13,6 +13,7 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import model.Buddy;
 import model.Graveyard;
+import org.json.JSONException;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
@@ -31,14 +32,19 @@ public class BuddyApp {
     private WindowBasedTextGUI endGui;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
+    boolean loaded;
 
     // EFFECTS: starts running the program
     public BuddyApp() throws IOException, InterruptedException {
         this.graveyard = new Graveyard();
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
+        this.loaded = false;
         checkLoad();
         printOpening();
+        if (loaded == false) {
+            createCurrBuddy();
+        }
         runBuddy();
     }
 
@@ -56,7 +62,6 @@ public class BuddyApp {
 
     // EFFECTS: begins the program by starting the screen and begins ticking
     private void runBuddy() throws IOException, InterruptedException {
-        createCurrBuddy();
         screen = new DefaultTerminalFactory().createScreen();
         screen.startScreen();
         beginTicks();
@@ -163,6 +168,7 @@ public class BuddyApp {
         if (result.equals("y")) {
             this.graveyard.addBuddy(currBuddy);
         }
+        createCurrBuddy();
     }
 
     // REQUIRES: inputted name must not contain spaces
@@ -175,7 +181,7 @@ public class BuddyApp {
         this.currBuddy = new Buddy(newName);
     }
 
-    private void checkLoad() {
+    private void checkLoad() throws IOException, InterruptedException {
         System.out.println("Would you like to load in your saved Buddy and graveyard?");
         String result = "";
 
@@ -190,6 +196,7 @@ public class BuddyApp {
 
         if (result.equals("y")) {
             loadBuddyAndGraveyard();
+            this.loaded = true;
         }
     }
 
@@ -294,13 +301,17 @@ public class BuddyApp {
 
     // MODIFIES: this
     // EFFECTS: loads workroom from file
-    private void loadBuddyAndGraveyard() {
+    private void loadBuddyAndGraveyard() throws IOException, InterruptedException {
         try {
             this.currBuddy = jsonReader.readBuddy();
             this.graveyard = jsonReader.readGraveyard();
             System.out.println("Loaded " + currBuddy.getName() + " and graveyard from " + JSON_STORE);
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
+        } catch (JSONException e) {
+            System.out.println("It looks like you don't have a current Buddy saved in: " + JSON_STORE);
+            createCurrBuddy();
+            runBuddy();
         }
     }
 }
