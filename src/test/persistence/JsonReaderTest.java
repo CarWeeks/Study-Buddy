@@ -1,69 +1,112 @@
 package persistence;
 
+import model.Buddy;
+import model.Graveyard;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
+// citation: code in this class is modelled from the Workroom example from CPSC 210
 public class JsonReaderTest {
-    //NOTE TO CPSC 210 STUDENTS: the strategy in designing tests for the JsonWriter is to
-    //write data to a file and then use the reader to read it back in and check that we
-    //read in a copy of what was written out.
 
     @Test
-    void testWriterInvalidFile() {
+    void testReaderNonExistentFile() {
+        JsonReader reader = new JsonReader("./data/noSuchFile.json");
         try {
-            WorkRoom wr = new WorkRoom("My work room");
-            JsonWriter writer = new JsonWriter("./data/my\0illegal:fileName.json");
-            writer.open();
-            fail("IOException was expected");
+            Buddy b = reader.readBuddy();
+            fail("IOException expected");
         } catch (IOException e) {
             // pass
         }
     }
 
     @Test
-    void testWriterEmptyWorkroom() {
+    void testEmptyGraveyard() {
+        JsonReader reader = new JsonReader("./data/currBuddyNoGraveyard.json");
         try {
-            WorkRoom wr = new WorkRoom("My work room");
-            JsonWriter writer = new JsonWriter("./data/testWriterEmptyWorkroom.json");
-            writer.open();
-            writer.write(wr);
-            writer.close();
+            Buddy b = reader.readBuddy();
+            Graveyard g = reader.readGraveyard();
+            assertEquals("Steven", b.getName());
+            assertEquals(10000, b.getHealth());
+            assertEquals(10000, b.getEnergy());
+            assertEquals(10000, b.getHappiness());
+            assertEquals(8811, b.getFood());
+            assertTrue(b.isLiving());
 
-            JsonReader reader = new JsonReader("./data/testWriterEmptyWorkroom.json");
-            wr = reader.read();
-            assertEquals("My work room", wr.getName());
-            assertEquals(0, wr.numThingies());
+            assertEquals(0, g.getLength());
         } catch (IOException e) {
-            fail("Exception should not have been thrown");
+            fail("Couldn't read from file");
         }
     }
 
     @Test
-    void testWriterGeneralWorkroom() {
+    void testOneGraveyard() {
+        JsonReader reader = new JsonReader("./data/currBuddyOneGraveyard.json");
         try {
-            WorkRoom wr = new WorkRoom("My work room");
-            wr.addThingy(new Thingy("saw", Category.METALWORK));
-            wr.addThingy(new Thingy("needle", Category.STITCHING));
-            JsonWriter writer = new JsonWriter("./data/testWriterGeneralWorkroom.json");
-            writer.open();
-            writer.write(wr);
-            writer.close();
+            Buddy b = reader.readBuddy();
+            Graveyard g = reader.readGraveyard();
+            assertEquals("Steven", b.getName());
+            assertEquals(10000, b.getHealth());
+            assertEquals(10000, b.getEnergy());
+            assertEquals(10000, b.getHappiness());
+            assertEquals(8811, b.getFood());
+            assertTrue(b.isLiving());
 
-            JsonReader reader = new JsonReader("./data/testWriterGeneralWorkroom.json");
-            wr = reader.read();
-            assertEquals("My work room", wr.getName());
-            List<Thingy> thingies = wr.getThingies();
-            assertEquals(2, thingies.size());
-            checkThingy("saw", Category.METALWORK, thingies.get(0));
-            checkThingy("needle", Category.STITCHING, thingies.get(1));
-
+            assertEquals(1, g.getLength());
+            Buddy graveBuddy = g.getBuddy(0);
+            assertEquals("Perry", graveBuddy.getName());
+            assertEquals(10000, graveBuddy.getHealth());
+            assertEquals(10000, graveBuddy.getEnergy());
+            assertEquals(10000, graveBuddy.getHappiness());
+            assertEquals(9970, graveBuddy.getFood());
+            assertFalse(graveBuddy.isLiving());
         } catch (IOException e) {
-            fail("Exception should not have been thrown");
+            fail("Couldn't read from file");
+        }
+    }
+
+    @Test
+    void testThreeGraveyard() {
+        JsonReader reader = new JsonReader("./data/currBuddyThreeGraveyard.json");
+        try {
+            Buddy b = reader.readBuddy();
+            Graveyard g = reader.readGraveyard();
+            assertEquals("Steven", b.getName());
+            assertEquals(10000, b.getHealth());
+            assertEquals(10000, b.getEnergy());
+            assertEquals(10000, b.getHappiness());
+            assertEquals(8811, b.getFood());
+            assertTrue(b.isLiving());
+
+            assertEquals(3, g.getLength());
+            Buddy graveBuddy1 = g.getBuddy(0);
+            assertEquals("Perry", graveBuddy1.getName());
+            assertEquals(10000, graveBuddy1.getHealth());
+            assertEquals(10000, graveBuddy1.getEnergy());
+            assertEquals(10000, graveBuddy1.getHappiness());
+            assertEquals(9970, graveBuddy1.getFood());
+            assertFalse(graveBuddy1.isLiving());
+
+            Buddy graveBuddy2 = g.getBuddy(1);
+            assertEquals("Nick", graveBuddy2.getName());
+            assertEquals(10000, graveBuddy2.getHealth());
+            assertEquals(10000, graveBuddy2.getEnergy());
+            assertEquals(10000, graveBuddy2.getHappiness());
+            assertEquals(9974, graveBuddy2.getFood());
+            assertFalse(graveBuddy2.isLiving());
+
+            Buddy graveBuddy3 = g.getBuddy(2);
+            assertEquals("Emu", graveBuddy3.getName());
+            assertEquals(800, graveBuddy3.getHealth());
+            assertEquals(10, graveBuddy3.getEnergy());
+            assertEquals(10000, graveBuddy3.getHappiness());
+            assertEquals(9973, graveBuddy3.getFood());
+            assertFalse(graveBuddy3.isLiving());
+        } catch (IOException e) {
+            fail("Couldn't read from file");
         }
     }
 }

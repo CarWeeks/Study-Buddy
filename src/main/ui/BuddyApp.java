@@ -55,7 +55,7 @@ public class BuddyApp {
         System.out.println("While your Buddy is alive you will be able to enter the following commands:");
         System.out.println("\u001B[33m"
                 + "f: to feed your Buddy\nk: to kill your Buddy\ng: to view your graveyard in the console\ns: to save"
-                + "your current Buddy and graveyard"
+                + " your current Buddy and graveyard"
                 + "\u001B[0m");
         System.out.println("Enjoy, and don't let your Buddy die!");
     }

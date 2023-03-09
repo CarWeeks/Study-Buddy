@@ -3,6 +3,8 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GraveyardTest {
@@ -48,5 +50,18 @@ public class GraveyardTest {
         assertEquals(testBuddy2, testGraveyard.getBuddy(1));
         assertEquals(testBuddy3, testGraveyard.getBuddy(2));
         assertEquals(testBuddy4, testGraveyard.getBuddy(3));
+    }
+
+    @Test
+    public void testGetGraves() {
+        assertEquals(3, testGraveyard.getLength());
+        Buddy b1 = testGraveyard.getBuddy(0);
+        Buddy b2 = testGraveyard.getBuddy(1);
+        Buddy b3 = testGraveyard.getBuddy(2);
+        ArrayList<Buddy> testBuddies = new ArrayList<>();
+        testBuddies.add(b1);
+        testBuddies.add(b2);
+        testBuddies.add(b3);
+        assertEquals(testBuddies, testGraveyard.getGraves());
     }
 }

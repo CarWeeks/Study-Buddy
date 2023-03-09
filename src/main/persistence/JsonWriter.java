@@ -26,7 +26,7 @@ public class JsonWriter {
     }
 
     // MODIFIES: this
-    // EFFECTS: writes JSON representation of workroom to file
+    // EFFECTS: writes JSON representation of current Buddy and graveyard to file
     public void write(Buddy b, Graveyard g) {
         JSONObject jsonB = b.buddyToJson();
         JSONArray jsonG = g.allBuddiesToJson();

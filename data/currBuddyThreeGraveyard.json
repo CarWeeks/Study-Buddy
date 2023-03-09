@@ -1,0 +1,48 @@
+{
+    "graveyard": [
+        {
+            "death": 1678333391700,
+            "alive": false,
+            "happiness": 10000,
+            "timeAlive": 3,
+            "name": "Perry",
+            "health": 10000,
+            "birth": 1678333387746,
+            "food": 9970,
+            "energy": 10000
+        },
+        {
+            "death": 1678333479854,
+            "alive": false,
+            "happiness": 10000,
+            "timeAlive": 2,
+            "name": "Nick",
+            "health": 10000,
+            "birth": 1678333477014,
+            "food": 9974,
+            "energy": 10000
+        },
+        {
+            "death": 1678333489718,
+            "alive": false,
+            "happiness": 10000,
+            "timeAlive": 2,
+            "name": "Emu",
+            "health": 800,
+            "birth": 1678333486799,
+            "food": 9973,
+            "energy": 10
+        }
+    ],
+    "currBuddy": {
+      "death": 0,
+      "alive": true,
+      "happiness": 10000,
+      "timeAlive": 0,
+      "name": "Steven",
+      "health": 10000,
+      "birth": 1678332760023,
+      "food": 8811,
+      "energy": 10000
+  }
+}

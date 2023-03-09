@@ -5,10 +5,10 @@
         "alive": true,
         "happiness": 10000,
         "timeAlive": 0,
-        "name": "Steven",
+        "name": "Chris",
         "health": 10000,
-        "birth": 1678332760023,
-        "food": 8811,
+        "birth": 1678337745066,
+        "food": 10000,
         "energy": 10000
     }
 }
