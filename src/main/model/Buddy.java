@@ -6,7 +6,7 @@ import java.lang.System;
 
 // represents a Buddy with a name, birth time, death time and health, food, energy, and happiness bars
 public class Buddy {
-    public static final int TICKS_PER_SECOND = 10;
+    public static final int TICKS_PER_SECOND = 1000;
     public static final int MAX_BAR = 10000;
     private final long creationTime;
     private long deathTime;

@@ -1,14 +1,24 @@
 {
-    "graveyard": [],
+    "graveyard": [{
+        "death": 1678986070582,
+        "alive": false,
+        "happiness": 10000,
+        "timeAlive": 4,
+        "name": "Steve",
+        "health": 10000,
+        "birth": 1678986066561,
+        "food": 9972,
+        "energy": 10000
+    }],
     "currBuddy": {
         "death": 0,
         "alive": true,
-        "happiness": 10000,
+        "happiness": 8098,
         "timeAlive": 0,
-        "name": "Steven",
-        "health": 10000,
-        "birth": 1678337787021,
-        "food": 9887,
-        "energy": 10000
+        "name": "Bob",
+        "health": 8098,
+        "birth": 1678986080783,
+        "food": 0,
+        "energy": 3098
     }
 }
