@@ -212,6 +212,8 @@ public class Buddy {
         json.put("alive", this.living);
         return json;
     }
+
+
 }
 
 

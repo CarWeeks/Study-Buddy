@@ -2,39 +2,74 @@ package ui;
 
 import model.Buddy;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class BuddyPanel extends JPanel {
-    private static final String HEALTH_TXT = "Health: ";
-    private static final String FOOD_TXT = "Food: ";
-    private static final String ENERGY_TXT = "Energy: ";
-    private static final String HAPPINESS_TXT = "Happiness: ";
-    private static final int LBL_WIDTH = 200;
-    private static final int LBL_HEIGHT = 30;
-    private JLabel healthLbl;
-    private JLabel foodLbl;
-    private JLabel energyLbl;
-    private JLabel happinessLbl;
-    private Buddy currBuddy;
+    Buddy buddy;
+//    JButton feedButton = new JButton("Feed");
+//    JButton killButton = new JButton("Kill");
+//    JButton saveButton = new JButton("Save");
+//    JButton exitButton = new JButton("Exit");
 
-    public BuddyPanel(Buddy b) {
-        this.currBuddy = b;
-        setBackground(new Color(180, 180, 180));
-        healthLbl = new JLabel(HEALTH_TXT + currBuddy.getHealth());
-        healthLbl.setPreferredSize(new Dimension(LBL_WIDTH, LBL_HEIGHT));
-        foodLbl = new JLabel(FOOD_TXT + currBuddy.getFood());
-        foodLbl.setPreferredSize(new Dimension(LBL_WIDTH, LBL_HEIGHT));
-        energyLbl = new JLabel(ENERGY_TXT + currBuddy.getEnergy());
-        energyLbl.setPreferredSize(new Dimension(LBL_WIDTH, LBL_HEIGHT));
-        happinessLbl = new JLabel(HAPPINESS_TXT + currBuddy.getHappiness());
-        healthLbl.setPreferredSize(new Dimension(LBL_WIDTH, LBL_HEIGHT));
-        add(healthLbl);
-        add(Box.createHorizontalStrut(10));
-        add(foodLbl);
-        add(Box.createHorizontalStrut(10));
-        add(energyLbl);
-        add(Box.createHorizontalStrut(10));
-        add(happinessLbl);
+    // Constructs a game panel
+    // effects:  sets size and background colour of panel,
+    //           updates this with the game to be displayed
+    public BuddyPanel(Buddy buddy) {
+        setPreferredSize(new Dimension(640, 480));
+        setBackground(Color.GRAY);
+        this.buddy = buddy;
+//        this.add(feedButton);
+//        this.add(killButton);
+//        this.add(saveButton);
+//        this.add(exitButton);
     }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        drawGame(g);
+
+//        if (game.isOver()) {
+//            gameOver(g);
+//        }
+    }
+
+    // Draws the game
+    // modifies: g
+    // effects:  draws the game onto g
+    private void drawGame(Graphics g) {
+        drawBuddy(g);
+        //drawInvaders(g);
+        //drawMissiles(g);
+    }
+
+    // Draw the tank
+    // modifies: g
+    // effects:  draws the tank onto g
+    private void drawBuddy(Graphics g) {
+        try {
+            BufferedImage myPicture = ImageIO.read(new File("./data/Wolf (1).jpeg"));
+            JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+            add(picLabel);
+        } catch (IOException e) {
+            System.exit(0);
+        }
+    }
+
+//    @Override
+//    public void actionPerformed(ActionEvent e) {
+//        if (e.getSource() == feedButton) {
+//            buddy.increaseFood(5);
+//        } else if (e.getSource() == saveButton) {
+//
+//        }
+//    }
 }
