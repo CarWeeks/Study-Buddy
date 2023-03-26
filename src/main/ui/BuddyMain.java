@@ -2,31 +2,27 @@ package ui;
 
 import model.Buddy;
 import model.Graveyard;
-import org.json.JSONException;
-import persistence.JsonReader;
-import persistence.JsonWriter;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Scanner;
 
 import javax.swing.*;
 
 public class BuddyMain extends JFrame implements ActionListener {
 
-    private static final int INTERVAL = 100;
-    private static final String JSON_STORE = "./data/currentState.json";
-    private StatsPanel sp;
-    private BuddyPanel bp;
+//    private static final String JSON_STORE = "./data/currentState.json";
+    private JPanel cardPanel;
+    private CardLayout cardLayout;
+    //private StatsPanel sp;
+    //private BuddyPanel bp;
+    private BuddyStatsPanel bsp;
     private OptionsPanel op;
     private PickBuddyPanel pbp;
     private Buddy currBuddy;
     private Graveyard graveyard;
-    private JsonWriter jsonWriter;
-    private JsonReader jsonReader;
+//    private JsonWriter jsonWriter;
+//    private JsonReader jsonReader;
     JButton feedButton = new JButton("Feed");
     JButton killButton = new JButton("Kill");
     JButton saveButton = new JButton("Save");
@@ -40,29 +36,38 @@ public class BuddyMain extends JFrame implements ActionListener {
 
     public BuddyMain() {
         super("Buddy");
-        this.setPreferredSize(new Dimension(1000, 550));
+        this.setPreferredSize(new Dimension(800, 600));
         currBuddy = new Buddy("Bob");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setUndecorated(false);
         this.graveyard = new Graveyard();
-        jsonWriter = new JsonWriter(JSON_STORE);
-        jsonReader = new JsonReader(JSON_STORE);
-        this.sp = new StatsPanel(currBuddy);
-        this.bp = new BuddyPanel(currBuddy);
-        bp.setLayout(new FlowLayout(FlowLayout.LEFT, 3, 3));
+//        jsonWriter = new JsonWriter(JSON_STORE);
+//        jsonReader = new JsonReader(JSON_STORE);
+        // card panel
+        this.cardLayout = new CardLayout();
+        this.cardPanel = new JPanel(cardLayout);
+        this.add(cardPanel);
+
+        //this.sp = new StatsPanel(currBuddy);
+        //this.bp = new BuddyPanel(currBuddy, );
+        //bp.setLayout(new FlowLayout(FlowLayout.LEFT, 3, 3));
+        this.bsp = new BuddyStatsPanel(currBuddy, graveyard);
         this.op = new OptionsPanel();
-        this.pbp = new PickBuddyPanel();
-        add(sp, BorderLayout.SOUTH);
-        add(bp, FlowLayout.LEFT);
-        add(op);
-        //add(pbp);
+        this.pbp = new PickBuddyPanel(currBuddy, graveyard);
+        //cardPanel.add(sp);
+        //cardPanel.add(bp);
+        cardPanel.add(bsp);
+        cardPanel.add(op);
+        cardPanel.add(pbp);
+        cardLayout.addLayoutComponent("BSP", bsp);
+        cardLayout.addLayoutComponent("OP", op);
+        cardLayout.show(cardPanel, "BSP");
         pack();
         centreOnScreen();
         setVisible(true);
-        addTimer();
+        bsp.addTimer();
         this.addButtons();
         this.addTextFields();
-
     }
 
     private void addTextFields() {
@@ -70,19 +75,19 @@ public class BuddyMain extends JFrame implements ActionListener {
     }
 
     private void addButtons() {
-        bp.add(feedButton, BoxLayout.X_AXIS);
-        feedButton.addActionListener(this);
-        bp.add(killButton, BoxLayout.X_AXIS);
-        killButton.addActionListener(this);
-        bp.add(saveButton, BoxLayout.X_AXIS);
-        saveButton.addActionListener(this);
-        bp.add(exitButton1, BoxLayout.X_AXIS);
-        exitButton1.addActionListener(this);
+//        bp.add(feedButton, BoxLayout.X_AXIS);
+//        feedButton.addActionListener(this);
+//        bp.add(killButton, BoxLayout.X_AXIS);
+//        killButton.addActionListener(this);
+//        bp.add(saveButton, BoxLayout.X_AXIS);
+//        saveButton.addActionListener(this);
+//        bp.add(exitButton1, BoxLayout.X_AXIS);
+//        exitButton1.addActionListener(this);
 
-        op.add(newBuddyButton);
-        newBuddyButton.addActionListener(this);
-        op.add(exitButton2);
-        exitButton2.addActionListener(this);
+//        op.add(newBuddyButton);
+//        newBuddyButton.addActionListener(this);
+//        op.add(exitButton2);
+//        exitButton2.addActionListener(this);
 
         pbp.add(newBuddyButton);
         newBuddyButton.addActionListener(this);
@@ -111,55 +116,6 @@ public class BuddyMain extends JFrame implements ActionListener {
         System.out.println("Enjoy, and don't let your Buddy die!");
     }
 
-    // EFFECTS: saves the current Buddy and Graveyard to file
-    private void saveBuddyAndGraveyard() {
-        try {
-            jsonWriter.open();
-            jsonWriter.write(currBuddy, graveyard);
-            jsonWriter.close();
-            System.out.println("Saved " + currBuddy.getName() + " and your graveyard to " + JSON_STORE);
-        } catch (FileNotFoundException e) {
-            System.out.println("Unable to write to file: " + JSON_STORE);
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: loads workroom from file
-    private void loadBuddyAndGraveyard() {
-        try {
-            this.currBuddy = jsonReader.readBuddy();
-            this.graveyard = jsonReader.readGraveyard();
-            System.out.println("Loaded " + currBuddy.getName() + " and graveyard from " + JSON_STORE);
-        } catch (IOException e) {
-            System.out.println("Unable to read from file: " + JSON_STORE);
-        } catch (JSONException e) {
-            System.out.println("It looks like you don't have a current Buddy saved in: " + JSON_STORE);
-        }
-    }
-
-    // Set up timer
-    // modifies: none
-    // effects:  initializes a timer that updates game each
-    //           INTERVAL milliseconds
-    private void addTimer() {
-        Timer t = new Timer(INTERVAL, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                if (!currBuddy.isLiving()) {
-                    op.repaint();
-                } else {
-                    currBuddy.updateStats();
-                    bp.repaint();
-                    sp.update();
-                }
-                //op.repaint();
-                //pbp.repaint();
-            }
-        });
-
-        t.start();
-    }
-
     // Centres frame on desktop
     // modifies: this
     // effects:  location of frame is set so frame is centred on desktop
@@ -171,33 +127,18 @@ public class BuddyMain extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == feedButton) {
-            currBuddy.increaseFood(5);
-        }
-        if (e.getSource() == saveButton) {
-            this.saveBuddyAndGraveyard();
-        }
-        if (e.getSource() == exitButton1 || e.getSource() == exitButton2) {
-            System.exit(0);
-        }
-        if (e.getSource() == killButton) {
-            currBuddy.kill();
-        }
         if (e.getSource() == newBuddyButton) {
             pbp.setVisible(true);
         }
         if (e.getSource() == createBuddy) {
             createCurrBuddy(newBuddyName.getText());
-            pbp.setVisible(false);
-            bp.setVisible(true);
-            sp.setVisible(true);
         }
         if (e.getSource() == loadBuddy) {
-            loadBuddyAndGraveyard();
-            pbp.setVisible(false);
-            bp.setVisible(true);
-            sp.setVisible(true);
-            op.setVisible(false);
+            //loadBuddyAndGraveyard();
+            //pbp.setVisible(false);
+            //bp.setVisible(true);
+            //sp.setVisible(true);
+            //op.setVisible(false);
         }
     }
 }

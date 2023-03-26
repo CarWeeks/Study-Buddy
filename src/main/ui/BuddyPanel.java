@@ -1,6 +1,10 @@
 package ui;
 
 import model.Buddy;
+import model.Graveyard;
+import org.json.JSONException;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -9,26 +13,29 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class BuddyPanel extends JPanel {
+public class BuddyPanel extends JPanel implements ActionListener {
     Buddy buddy;
-//    JButton feedButton = new JButton("Feed");
-//    JButton killButton = new JButton("Kill");
-//    JButton saveButton = new JButton("Save");
-//    JButton exitButton = new JButton("Exit");
+    Graveyard graveyard;
+    private static final String JSON_STORE = "./data/currentState.json";
+    private JsonWriter jsonWriter;
+    JButton feedButton = new JButton("Feed");
+    JButton killButton = new JButton("Kill");
+    JButton saveButton = new JButton("Save");
+    JButton exitButton = new JButton("Exit");
 
     // Constructs a game panel
     // effects:  sets size and background colour of panel,
     //           updates this with the game to be displayed
-    public BuddyPanel(Buddy buddy) {
+    public BuddyPanel(Buddy buddy, Graveyard graveyard) {
         setPreferredSize(new Dimension(640, 480));
         setBackground(Color.GRAY);
+        jsonWriter = new JsonWriter(JSON_STORE);
         this.buddy = buddy;
-//        this.add(feedButton);
-//        this.add(killButton);
-//        this.add(saveButton);
-//        this.add(exitButton);
+        this.graveyard = graveyard;
+        this.addButtons();
     }
 
     @Override
@@ -36,10 +43,6 @@ public class BuddyPanel extends JPanel {
         super.paintComponent(g);
 
         drawGame(g);
-
-//        if (game.isOver()) {
-//            gameOver(g);
-//        }
     }
 
     // Draws the game
@@ -47,8 +50,6 @@ public class BuddyPanel extends JPanel {
     // effects:  draws the game onto g
     private void drawGame(Graphics g) {
         drawBuddy(g);
-        //drawInvaders(g);
-        //drawMissiles(g);
     }
 
     // Draw the tank
@@ -64,12 +65,44 @@ public class BuddyPanel extends JPanel {
         }
     }
 
-//    @Override
-//    public void actionPerformed(ActionEvent e) {
-//        if (e.getSource() == feedButton) {
-//            buddy.increaseFood(5);
-//        } else if (e.getSource() == saveButton) {
-//
+    public void addButtons() {
+        this.add(feedButton, BoxLayout.X_AXIS);
+        feedButton.addActionListener(this);
+        this.add(killButton, BoxLayout.X_AXIS);
+        killButton.addActionListener(this);
+        this.add(saveButton, BoxLayout.X_AXIS);
+        saveButton.addActionListener(this);
+        this.add(exitButton, BoxLayout.X_AXIS);
+        exitButton.addActionListener(this);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == feedButton) {
+            buddy.increaseFood(5);
+
+        }
+        if (e.getSource() == saveButton) {
+            this.saveBuddyAndGraveyard();
+        }
+//        if (e.getSource() == exitButton) {
+//            System.exit(0);
 //        }
-//    }
+        if (e.getSource() == killButton) {
+            buddy.kill();
+            //layout.show(cardPanel, "OP");
+        }
+    }
+
+    // EFFECTS: saves the current Buddy and Graveyard to file
+    private void saveBuddyAndGraveyard() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(buddy, graveyard);
+            jsonWriter.close();
+            System.out.println("Saved " + buddy.getName() + " and your graveyard to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
 }

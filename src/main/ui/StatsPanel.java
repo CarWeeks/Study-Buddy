@@ -20,6 +20,7 @@ public class StatsPanel extends JPanel {
 
     public StatsPanel(Buddy b) {
         this.currBuddy = b;
+        setPreferredSize(new Dimension(800, 50));
         setBackground(new Color(180, 180, 180));
         healthLbl = new JLabel(HEALTH_TXT + currBuddy.getHealth());
         healthLbl.setPreferredSize(new Dimension(LBL_WIDTH, LBL_HEIGHT));

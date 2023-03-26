@@ -1,14 +1,14 @@
 {
     "graveyard": [],
     "currBuddy": {
-        "death": 1679784575624,
-        "alive": false,
+        "death": 0,
+        "alive": true,
         "happiness": 10000,
-        "timeAlive": 2,
-        "name": "Enter your new Buddy's name: ",
+        "timeAlive": 0,
+        "name": "Bob",
         "health": 10000,
-        "birth": 1679784572985,
-        "food": 9968,
+        "birth": 1679811796207,
+        "food": 9991,
         "energy": 10000
     }
 }
