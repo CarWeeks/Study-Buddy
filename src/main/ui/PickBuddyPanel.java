@@ -1,7 +1,6 @@
 package ui;
 
 import model.Buddy;
-import model.Graveyard;
 import org.json.JSONException;
 import persistence.JsonReader;
 
@@ -13,19 +12,26 @@ import java.io.IOException;
 
 public class PickBuddyPanel extends JPanel implements ActionListener {
     private static final String JSON_STORE = "./data/currentState.json";
-    Buddy currBuddy;
-    Graveyard graveyard;
+    CurrState currState;
+    JPanel cardPanel;
+    CardLayout cardLayout;
     private JsonReader jsonReader;
     JButton createBuddy = new JButton("Make new Buddy");
     JButton loadBuddy = new JButton("Load previous state");
     JButton exitButton = new JButton("Exit");
+    TextField buddyNameEntry = new TextField(15);
+    JLabel buddyName = new JLabel("Enter new Buddy name here: ");
 
-    public PickBuddyPanel(Buddy currBuddy, Graveyard graveyard) {
+    public PickBuddyPanel(CurrState currState, JPanel cardPanel) {
         setPreferredSize(new Dimension(640, 480));
         setBackground(Color.GRAY);
-        this.currBuddy = currBuddy;
-        this.graveyard = graveyard;
+        this.currState = currState;
+        this.cardPanel = cardPanel;
+        this.cardLayout = (CardLayout) cardPanel.getLayout();
         jsonReader = new JsonReader(JSON_STORE);
+        buddyName.setLabelFor(buddyNameEntry);
+        this.add(buddyName);
+        this.add(buddyNameEntry);
         this.addButtons();
     }
 
@@ -42,9 +48,10 @@ public class PickBuddyPanel extends JPanel implements ActionListener {
     // EFFECTS: loads workroom from file
     private void loadBuddyAndGraveyard() {
         try {
-            this.currBuddy = jsonReader.readBuddy();
-            this.graveyard = jsonReader.readGraveyard();
-            System.out.println("Loaded " + currBuddy.getName() + " and graveyard from " + JSON_STORE);
+            this.currState.setCurrBuddy(jsonReader.readBuddy());
+            this.currState.setGraveyard(jsonReader.readGraveyard());
+            System.out.println("Loaded " + this.currState.getCurrBuddy().getName()
+                    + " and graveyard from " + JSON_STORE);
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
         } catch (JSONException e) {
@@ -55,14 +62,15 @@ public class PickBuddyPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == createBuddy) {
-            //this.currBuddy = (newBuddyName.getText());
+            this.currState.setCurrBuddy(new Buddy(buddyNameEntry.getText()));
+            this.cardLayout.show(this.cardPanel, "BSP");
         }
         if (e.getSource() == loadBuddy) {
-            //loadBuddyAndGraveyard();
-            //pbp.setVisible(false);
-            //bp.setVisible(true);
-            //sp.setVisible(true);
-            //op.setVisible(false);
+            loadBuddyAndGraveyard();
+            this.cardLayout.show(this.cardPanel, "BSP");
+        }
+        if (e.getSource() == exitButton) {
+            System.exit(0);
         }
     }
 }

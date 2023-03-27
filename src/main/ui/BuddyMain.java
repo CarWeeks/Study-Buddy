@@ -1,107 +1,51 @@
 package ui;
 
 import model.Buddy;
-import model.Graveyard;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-public class BuddyMain extends JFrame implements ActionListener {
+public class BuddyMain extends JFrame {
 
-//    private static final String JSON_STORE = "./data/currentState.json";
     private JPanel cardPanel;
     private CardLayout cardLayout;
-    //private StatsPanel sp;
-    //private BuddyPanel bp;
     private BuddyStatsPanel bsp;
-    private OptionsPanel op;
     private PickBuddyPanel pbp;
-    private Buddy currBuddy;
-    private Graveyard graveyard;
-//    private JsonWriter jsonWriter;
-//    private JsonReader jsonReader;
-    JButton feedButton = new JButton("Feed");
-    JButton killButton = new JButton("Kill");
-    JButton saveButton = new JButton("Save");
-    JButton exitButton1 = new JButton("Exit");
-    JButton exitButton2 = new JButton("Exit");
-    JButton newBuddyButton = new JButton("Choose a buddy");
-    JButton createBuddy = new JButton("Create Buddy");
-    JButton loadBuddy = new JButton("Load previous save");
-    TextField newBuddyName = new TextField("Enter your new Buddy's name: ");
-
+    private AddGravePanel agp;
+    CurrState cs;
 
     public BuddyMain() {
         super("Buddy");
         this.setPreferredSize(new Dimension(800, 600));
-        currBuddy = new Buddy("Bob");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setUndecorated(false);
-        this.graveyard = new Graveyard();
-//        jsonWriter = new JsonWriter(JSON_STORE);
-//        jsonReader = new JsonReader(JSON_STORE);
+        cs = new CurrState();
         // card panel
         this.cardLayout = new CardLayout();
         this.cardPanel = new JPanel(cardLayout);
         this.add(cardPanel);
-
-        //this.sp = new StatsPanel(currBuddy);
-        //this.bp = new BuddyPanel(currBuddy, );
-        //bp.setLayout(new FlowLayout(FlowLayout.LEFT, 3, 3));
-        this.bsp = new BuddyStatsPanel(currBuddy, graveyard);
-        this.op = new OptionsPanel();
-        this.pbp = new PickBuddyPanel(currBuddy, graveyard);
-        //cardPanel.add(sp);
-        //cardPanel.add(bp);
+        this.bsp = new BuddyStatsPanel(cs, this.cardPanel);
+        this.pbp = new PickBuddyPanel(cs, this.cardPanel);
+        this.agp = new AddGravePanel(this.cs, this.cardPanel);
         cardPanel.add(bsp);
-        cardPanel.add(op);
         cardPanel.add(pbp);
+        cardPanel.add(agp);
         cardLayout.addLayoutComponent("BSP", bsp);
-        cardLayout.addLayoutComponent("OP", op);
-        cardLayout.show(cardPanel, "BSP");
+        cardLayout.addLayoutComponent("PBP", pbp);
+        cardLayout.addLayoutComponent("AGP", agp);
+        cardLayout.show(cardPanel, "PBP");
         pack();
         centreOnScreen();
         setVisible(true);
         bsp.addTimer();
-        this.addButtons();
-        this.addTextFields();
-    }
-
-    private void addTextFields() {
-        pbp.add(newBuddyName);
-    }
-
-    private void addButtons() {
-//        bp.add(feedButton, BoxLayout.X_AXIS);
-//        feedButton.addActionListener(this);
-//        bp.add(killButton, BoxLayout.X_AXIS);
-//        killButton.addActionListener(this);
-//        bp.add(saveButton, BoxLayout.X_AXIS);
-//        saveButton.addActionListener(this);
-//        bp.add(exitButton1, BoxLayout.X_AXIS);
-//        exitButton1.addActionListener(this);
-
-//        op.add(newBuddyButton);
-//        newBuddyButton.addActionListener(this);
-//        op.add(exitButton2);
-//        exitButton2.addActionListener(this);
-
-        pbp.add(newBuddyButton);
-        newBuddyButton.addActionListener(this);
-        pbp.add(createBuddy);
-        createBuddy.addActionListener(this);
-        pbp.add(loadBuddy);
-        loadBuddy.addActionListener(this);
     }
 
     // REQUIRES: inputted name must not contain spaces
     // MODIFIES: this
     // EFFECTS: creates a new Buddy object based on user input
     private void createCurrBuddy(String buddyName) {
-        this.currBuddy = new Buddy(buddyName);
+        this.cs.setCurrBuddy(new Buddy(buddyName));
     }
 
     private void printOpening() {
@@ -122,23 +66,5 @@ public class BuddyMain extends JFrame implements ActionListener {
     private void centreOnScreen() {
         Dimension scrn = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation((scrn.width - getWidth()) / 2, (scrn.height - getHeight()) / 2);
-    }
-
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == newBuddyButton) {
-            pbp.setVisible(true);
-        }
-        if (e.getSource() == createBuddy) {
-            createCurrBuddy(newBuddyName.getText());
-        }
-        if (e.getSource() == loadBuddy) {
-            //loadBuddyAndGraveyard();
-            //pbp.setVisible(false);
-            //bp.setVisible(true);
-            //sp.setVisible(true);
-            //op.setVisible(false);
-        }
     }
 }

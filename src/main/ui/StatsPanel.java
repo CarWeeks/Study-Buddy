@@ -16,19 +16,19 @@ public class StatsPanel extends JPanel {
     private JLabel foodLbl;
     private JLabel energyLbl;
     private JLabel happinessLbl;
-    private Buddy currBuddy;
+    private CurrState currState;
 
-    public StatsPanel(Buddy b) {
-        this.currBuddy = b;
+    public StatsPanel(CurrState currState) {
+        this.currState = currState;
         setPreferredSize(new Dimension(800, 50));
         setBackground(new Color(180, 180, 180));
-        healthLbl = new JLabel(HEALTH_TXT + currBuddy.getHealth());
+        healthLbl = new JLabel(HEALTH_TXT + currState.getCurrBuddy().getHealth());
         healthLbl.setPreferredSize(new Dimension(LBL_WIDTH, LBL_HEIGHT));
-        foodLbl = new JLabel(FOOD_TXT + currBuddy.getFood());
+        foodLbl = new JLabel(FOOD_TXT + currState.getCurrBuddy().getFood());
         foodLbl.setPreferredSize(new Dimension(LBL_WIDTH, LBL_HEIGHT));
-        energyLbl = new JLabel(ENERGY_TXT + currBuddy.getEnergy());
+        energyLbl = new JLabel(ENERGY_TXT + currState.getCurrBuddy().getEnergy());
         energyLbl.setPreferredSize(new Dimension(LBL_WIDTH, LBL_HEIGHT));
-        happinessLbl = new JLabel(HAPPINESS_TXT + currBuddy.getHappiness());
+        happinessLbl = new JLabel(HAPPINESS_TXT + currState.getCurrBuddy().getHappiness());
         healthLbl.setPreferredSize(new Dimension(LBL_WIDTH, LBL_HEIGHT));
         add(healthLbl);
         add(Box.createHorizontalStrut(10));
@@ -40,10 +40,10 @@ public class StatsPanel extends JPanel {
     }
 
     public void update() {
-        healthLbl.setText(HEALTH_TXT + currBuddy.getHealth());
-        foodLbl.setText(FOOD_TXT + currBuddy.getFood());
-        energyLbl.setText(ENERGY_TXT + currBuddy.getEnergy());
-        happinessLbl.setText(HAPPINESS_TXT + currBuddy.getHappiness());
+        healthLbl.setText(HEALTH_TXT + currState.getCurrBuddy().getHealth());
+        foodLbl.setText(FOOD_TXT + currState.getCurrBuddy().getFood());
+        energyLbl.setText(ENERGY_TXT + currState.getCurrBuddy().getEnergy());
+        happinessLbl.setText(HAPPINESS_TXT + currState.getCurrBuddy().getHappiness());
         repaint();
     }
 }
