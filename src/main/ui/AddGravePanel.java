@@ -1,5 +1,7 @@
 package ui;
 
+import model.Graveyard;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,11 +14,13 @@ public class AddGravePanel extends JPanel implements ActionListener {
     JPanel cardPanel;
     CardLayout cardLayout;
     JLabel addBuddy;
+    GraveyardPanel graveyardPanel;
 
-    public AddGravePanel(CurrState currState, JPanel cardPanel) {
+    public AddGravePanel(CurrState currState, JPanel cardPanel, GraveyardPanel graveyardPanel) {
         this.currState = currState;
         this.cardPanel = cardPanel;
         this.cardLayout = (CardLayout) cardPanel.getLayout();
+        this.graveyardPanel = graveyardPanel;
         this.addBuddy = new JLabel("Would you like to add your Buddy to the graveyard?");
         this.add(addBuddy);
         this.add(yesButton);
@@ -28,10 +32,13 @@ public class AddGravePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == yesButton) {
+            this.currState.setReload(false);
             this.currState.getGraveyard().addBuddy(this.currState.getCurrBuddy());
+            graveyardPanel.updatePanel();
             this.cardLayout.show(cardPanel, "PBP");
         }
         if (e.getSource() == noButton) {
+            this.currState.setReload(false);
             this.cardLayout.show(cardPanel, "PBP");
         }
     }

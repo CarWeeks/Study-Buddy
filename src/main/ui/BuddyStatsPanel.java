@@ -1,12 +1,15 @@
 package ui;
 
+import model.Buddy;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class BuddyStatsPanel extends JPanel implements ActionListener {
-    private static final int INTERVAL = 10;
+    private static final int INTERVAL = 1;
+    private Buddy fillerBuddy;
     BuddyPanel bp;
     StatsPanel sp;
     CurrState currState;
@@ -37,15 +40,39 @@ public class BuddyStatsPanel extends JPanel implements ActionListener {
         Timer t = new Timer(INTERVAL, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if (currState.getCurrBuddy().isLiving()) {
+                if (!currState.getReload()) {
                     currState.getCurrBuddy().updateStats();
                     bp.repaint();
                     sp.update();
                     bp.updateName();
+                    updateFillerBuddy();
+                    updateReload();
+                } else {
+                    cardLayout.show(cardPanel, "AGP");
                 }
             }
         });
         t.start();
+    }
+
+    private void updateFillerBuddy() {
+        if (this.currState.getCurrBuddy().getHealth() == 0) {
+            this.fillerBuddy = new Buddy(
+                    this.currState.getCurrBuddy().getName(), this.currState.getCurrBuddy().getCreationTime(),
+                    this.currState.getCurrBuddy().getDeathTime(), this.currState.getCurrBuddy().getTimeAlive(),
+                    false, 10000, 10000,
+                    this.currState.getCurrBuddy().getEnergy(), this.currState.getCurrBuddy().getHappiness());
+        }
+        if (this.fillerBuddy != null) {
+            fillerBuddy.increaseFood(5);
+        }
+    }
+
+    private void updateReload() {
+        if (currState.getCurrBuddy().getHealth() == 0) {
+            this.currState.setCurrBuddy(fillerBuddy);
+            this.currState.setReload(true);
+        }
     }
 
     @Override

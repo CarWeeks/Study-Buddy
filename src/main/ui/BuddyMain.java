@@ -13,6 +13,7 @@ public class BuddyMain extends JFrame {
     private BuddyStatsPanel bsp;
     private PickBuddyPanel pbp;
     private AddGravePanel agp;
+    private GraveyardPanel gp;
     CurrState cs;
 
     public BuddyMain() {
@@ -27,13 +28,16 @@ public class BuddyMain extends JFrame {
         this.add(cardPanel);
         this.bsp = new BuddyStatsPanel(cs, this.cardPanel);
         this.pbp = new PickBuddyPanel(cs, this.cardPanel);
-        this.agp = new AddGravePanel(this.cs, this.cardPanel);
+        this.gp = new GraveyardPanel(this.cs, this.cardPanel);
+        this.agp = new AddGravePanel(this.cs, this.cardPanel, this.gp);
         cardPanel.add(bsp);
         cardPanel.add(pbp);
         cardPanel.add(agp);
+        cardPanel.add(gp);
         cardLayout.addLayoutComponent("BSP", bsp);
         cardLayout.addLayoutComponent("PBP", pbp);
         cardLayout.addLayoutComponent("AGP", agp);
+        cardLayout.addLayoutComponent("GP", gp);
         cardLayout.show(cardPanel, "PBP");
         pack();
         centreOnScreen();

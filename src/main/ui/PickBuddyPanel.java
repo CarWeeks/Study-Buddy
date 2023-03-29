@@ -19,6 +19,7 @@ public class PickBuddyPanel extends JPanel implements ActionListener {
     JButton createBuddy = new JButton("Make new Buddy");
     JButton loadBuddy = new JButton("Load previous state");
     JButton exitButton = new JButton("Exit");
+    JButton viewGraveyard = new JButton("See graveyard");
     TextField buddyNameEntry = new TextField(15);
     JLabel buddyName = new JLabel("Enter new Buddy name here: ");
 
@@ -42,6 +43,8 @@ public class PickBuddyPanel extends JPanel implements ActionListener {
         loadBuddy.addActionListener(this);
         this.add(exitButton);
         exitButton.addActionListener(this);
+        this.add(viewGraveyard);
+        viewGraveyard.addActionListener(this);
     }
 
     // MODIFIES: this
@@ -68,6 +71,9 @@ public class PickBuddyPanel extends JPanel implements ActionListener {
         if (e.getSource() == loadBuddy) {
             loadBuddyAndGraveyard();
             this.cardLayout.show(this.cardPanel, "BSP");
+        }
+        if (e.getSource() == viewGraveyard) {
+            this.cardLayout.show(cardPanel, "GP");
         }
         if (e.getSource() == exitButton) {
             System.exit(0);
