@@ -52,3 +52,16 @@ their computers.
 - As a user I want to decide whether my Buddy is stored in the graveyard when it dies
 - As a user I want to be able to save my current Buddy and the graveyard if I choose to do so
 - As a user I want to be able to reload my saved data and resume where I left off from the save if I choose to do so
+
+# Instructions for Grader
+
+- You can generate the first required action related to adding Xs to a Y by entering a name in the TextField and
+pressing the "Make new Buddy" button. This will create a Buddy (x), you can then press kill or let it die naturally,
+once it is dead you will be prompted with the choice to add the Buddy to the graveyard (Y).
+- You can generate the second required action related to adding Xs to a Y by pressing the "See graveyard" button, which
+will display all of the current Buddies (Xs) in your graveyard (Y).
+- You can locate my visual component by entering a name in the TextField and
+  pressing the "Make new Buddy" button. This will display your current Buddy as an image, it will be
+a happy image while the Buddy's food is over half full, and a sad image when it is below.
+- You can save the state of my application by pressing the "save" button while in the window with your current Buddy.
+- You can reload the state of my application by pressing the "Load previous state" button in the opening window.
