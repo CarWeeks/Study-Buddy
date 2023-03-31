@@ -1,11 +1,13 @@
 package ui;
 
 import model.Buddy;
+import model.Graveyard;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 // creates panel to show each past Buddy stored in the graveyard
 public class GraveyardPanel extends JPanel implements ActionListener {
@@ -14,6 +16,7 @@ public class GraveyardPanel extends JPanel implements ActionListener {
     JPanel cardPanel;
     CardLayout cardLayout;
     JButton backButton = new JButton("Back");
+    JButton clearButton = new JButton("Clear graveyard");
 
     // EFFECTS: constructs graveyard panel
     public GraveyardPanel(CurrState cs, JPanel cardPanel) {
@@ -22,8 +25,10 @@ public class GraveyardPanel extends JPanel implements ActionListener {
         this.currState = cs;
         this.cardPanel = cardPanel;
         this.cardLayout = (CardLayout) cardPanel.getLayout();
+        this.add(clearButton);
+        this.clearButton.addActionListener(this);
         this.add(backButton);
-        backButton.addActionListener(this);
+        this.backButton.addActionListener(this);
     }
 
     // MODIFIES: this
@@ -31,6 +36,7 @@ public class GraveyardPanel extends JPanel implements ActionListener {
     public void updatePanel() {
         this.removeAll();
         this.add(backButton);
+        this.add(clearButton);
 
         for (int i = 0; i < currState.getGraveyard().getLength(); i++) {
             Buddy b = currState.getGraveyard().getBuddy(i);
@@ -44,6 +50,11 @@ public class GraveyardPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
             cardLayout.show(cardPanel, "PBP");
+        }
+        if (e.getSource() == clearButton) {
+            this.currState.setGraveyard(new Graveyard());
+            this.updatePanel();
+            this.repaint();
         }
     }
 }
