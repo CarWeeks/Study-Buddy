@@ -12,7 +12,7 @@ public class CurrState {
 
     // EFFECTS: constructs a current Buddy and new graveyard
     public CurrState() {
-        this.currBuddy = new Buddy("");
+        this.currBuddy = new Buddy("Filler Buddy");
         this.graveyard = new Graveyard();
         this.idle = false;
     }

@@ -16,7 +16,6 @@ public class Buddy {
     private int food;       // represents a Buddy's food [0, MAX_BAR]
     private int energy;     // represents a Buddy's energy [0, MAX_BAR]
     private int happiness;  // represents a Buddy's happiness [0, MAX_BAR]
-    private static final EventLog eventLog = EventLog.getInstance();
 
     // REQUIRES: name is not an empty string
     // EFFECTS: instantiates a living buddy with a name and full stats
@@ -179,7 +178,7 @@ public class Buddy {
         this.living = false;
         this.deathTime = System.currentTimeMillis();
         this.timeAlive = (int) ((this.deathTime - this.creationTime) / 1000);
-        eventLog.logEvent(new Event(this.getName() + " died."));
+        EventLog.getInstance().logEvent(new Event(this.getName() + " died."));
     }
 
     // MODIFIES: this

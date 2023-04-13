@@ -8,7 +8,6 @@ import java.util.ArrayList;
 // represents a list of your past Buddies
 public class Graveyard {
     ArrayList<Buddy> graves;
-    private static final EventLog eventLog = EventLog.getInstance();
 
     // EFFECTS: instantiates a graveyard as a list of type Buddy
     public Graveyard() {
@@ -24,7 +23,7 @@ public class Graveyard {
     // MODIFIES: this
     // EFFECTS: adds a given buddy to the end of the graveyard list
     public void addBuddy(Buddy currBuddy) {
-        eventLog.logEvent(new Event(currBuddy.getName() + " was added to the graveyard."));
+        EventLog.getInstance().logEvent(new Event(currBuddy.getName() + " was added to the graveyard."));
         this.graves.add(currBuddy);
     }
 
@@ -54,7 +53,7 @@ public class Graveyard {
     // MODIFIES: this
     // EFFECTS: empties the graveyard
     public void clear() {
-        eventLog.logEvent(new Event("Graveyard cleared."));
+        EventLog.getInstance().logEvent(new Event("Graveyard cleared."));
         this.graves.clear();
     }
 }
