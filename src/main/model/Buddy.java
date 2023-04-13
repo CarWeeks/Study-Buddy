@@ -6,7 +6,6 @@ import java.lang.System;
 
 // represents a Buddy with a name, birth time, death time and health, food, energy, and happiness bars
 public class Buddy {
-    public static final int TICKS_PER_SECOND = 1000;
     public static final int MAX_BAR = 10000;
     private final long creationTime;
     private long deathTime;
@@ -17,6 +16,7 @@ public class Buddy {
     private int food;       // represents a Buddy's food [0, MAX_BAR]
     private int energy;     // represents a Buddy's energy [0, MAX_BAR]
     private int happiness;  // represents a Buddy's happiness [0, MAX_BAR]
+    private static final EventLog eventLog = EventLog.getInstance();
 
     // REQUIRES: name is not an empty string
     // EFFECTS: instantiates a living buddy with a name and full stats
@@ -179,6 +179,7 @@ public class Buddy {
         this.living = false;
         this.deathTime = System.currentTimeMillis();
         this.timeAlive = (int) ((this.deathTime - this.creationTime) / 1000);
+        eventLog.logEvent(new Event(this.getName() + " died."));
     }
 
     // MODIFIES: this

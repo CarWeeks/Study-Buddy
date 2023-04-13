@@ -1,6 +1,8 @@
 package ui;
 
 import model.Buddy;
+import model.EventLog;
+import model.Event;
 import org.json.JSONException;
 import persistence.JsonReader;
 
@@ -99,6 +101,9 @@ public class PickBuddyPanel extends JPanel implements ActionListener {
             this.cardLayout.show(cardPanel, "GP");
         }
         if (e.getSource() == exitButton) {
+            for (Event event : EventLog.getInstance()) {
+                System.out.println(event.getDate() + ": " + event.getDescription());
+            }
             System.exit(0);
         }
     }

@@ -1,6 +1,8 @@
 package ui;
 
 import model.Buddy;
+import model.Event;
+import model.EventLog;
 import persistence.JsonWriter;
 
 import javax.imageio.ImageIO;
@@ -31,7 +33,7 @@ public class BuddyPanel extends JPanel implements ActionListener {
 
     // EFFECTS: creates panel with current Buddy images
     public BuddyPanel(CurrState currState, JPanel cardPanel) {
-        setPreferredSize(new Dimension(640, 480));
+        setPreferredSize(new Dimension(800, 480));
         setBackground(new Color(69, 142, 175, 255));
         jsonWriter = new JsonWriter(JSON_STORE);
         this.currState = currState;
@@ -97,6 +99,9 @@ public class BuddyPanel extends JPanel implements ActionListener {
             this.saveBuddyAndGraveyard();
         }
         if (e.getSource() == exitButton) {
+            for (Event event : EventLog.getInstance()) {
+                System.out.println(event.getDate() + ": " + event.getDescription());
+            }
             System.exit(0);
         }
         if (e.getSource() == killButton) {

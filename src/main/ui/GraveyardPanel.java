@@ -52,7 +52,8 @@ public class GraveyardPanel extends JPanel implements ActionListener {
             cardLayout.show(cardPanel, "PBP");
         }
         if (e.getSource() == clearButton) {
-            this.currState.setGraveyard(new Graveyard());
+            this.currState.getGraveyard().clear();
+//            this.currState.setGraveyard(new Graveyard());
             this.updatePanel();
             this.repaint();
         }

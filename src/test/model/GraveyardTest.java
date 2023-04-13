@@ -64,4 +64,11 @@ public class GraveyardTest {
         testBuddies.add(b3);
         assertEquals(testBuddies, testGraveyard.getGraves());
     }
+
+    @Test
+    public void testClearGraveyard() {
+        assertEquals(3, testGraveyard.getLength());
+        testGraveyard.clear();
+        assertEquals(0, testGraveyard.getLength());
+    }
 }
