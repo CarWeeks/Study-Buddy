@@ -86,13 +86,14 @@ Looking at my diagram there are a few things I would refactor if I had more time
 program. The first and primary thing I would refactor is how my program uses the CurrState class. I had to make this
 class as a work-around in order to access and change just one current instance of a Buddy (current Buddy) and one
 current instance of the Graveyard class (current Graveyard) between all of my JPanel classes. However, I did this 
-before lecture on how to create a singleton, hence my implementation is what a singleton should be used for, but the
-"homemade" version. If I could go back I would change this implementation to be a singleton in the model package,
+before the lecture on how to create a singleton, hence my implementation is what a singleton should be used for, but 
+the "homemade" version. If I could go back I would change this implementation to be a singleton in the model package,
 as I believe this would be the cleanest and most optimal way to improve my program's design.
 
 I also experienced a lot of complications implementing a kill button as well as natural death due to the variety and
 coupling of the JPanel classes. If I were to go back and refactor this I would put the code that ticks 
-(runs the program) in one class which would additionally contain the other necessary parts of the code that rgard the
-Buddy's death, making the work-around for coupling much less, if not zero. And finally, one last change I would make that I feel would make a large difference would be to have anonymous
+(runs the program) in one class which would additionally contain the other necessary parts of the code that regard the
+Buddy's death, making the coupling that came with my work-around much less, if not zero. And finally, 
+one last change I would make that I feel would make a large difference would be to have anonymous
 ActionListeners rather than having most of my JPanels extend ActionListener. This would allow me to implement
 reactions to certain buttons being pressed in more localized areas, as well as reducing code duplication.
